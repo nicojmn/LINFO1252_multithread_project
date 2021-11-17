@@ -7,4 +7,4 @@ add_executable(
         LINFO1252_projet
         philosophers/src/main.c
         philosophers/headers/main.h
-)
+        producers_consumers/src/prod_cons.c producers_consumers/headers/prod_cons.h)
