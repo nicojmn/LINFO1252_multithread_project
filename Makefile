@@ -4,7 +4,7 @@ LIBS = -lcunit -lpthread
 INCLUDE_HEADERS_DIRECTORY = -Iheaders
 
 
-philosophers: ./philosophers/src/main.c
+philosopher: philosophers/src/main.c
 		$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@ $^ $(LIBS)
 
 # This command take a C source file and compile it to return a .o file
