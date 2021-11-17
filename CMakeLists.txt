@@ -3,4 +3,8 @@ project(LINFO1252_projet C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(LINFO1252_projet src/main.c headers/main.h)
+add_executable(
+        LINFO1252_projet
+        philosophers/src/main.c
+        philosophers/headers/main.h
+)
