@@ -3,14 +3,14 @@ CFLAGS = -Wall -Werror -g -std=gnu99
 LIBS = -lcunit -lpthread
 INCLUDE_HEADERS_DIRECTORY = -Iheaders
 
-all: philosophers/src/main.c producers_consumers/src/prod_cons.c
-	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@ $^ $(LIBS)
+all: philosophers/src/philosophers.c producers_consumers/src/prod_cons.c
+	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@.o $^ $(LIBS)
 
-philosopher: philosophers/src/main.c
-	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@ $^ $(LIBS)
+philosophers: philosophers/src/philosophers.c
+	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@.o $^ $(LIBS)
 
 producer_consumer: producers_consumers/src/prod_cons.c
-	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@ $^ $(LIBS)
+	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@.o $^ $(LIBS)
 
 # This command take a C source file and compile it to return a .o file
 %.o: %.c
@@ -20,6 +20,5 @@ producer_consumer: producers_consumers/src/prod_cons.c
 clean:
 	rm -f *.o
 	rm -f ./philosophers/src/*.o
-	rm -f philosopher
 
 .PHONY: philosophers clean
