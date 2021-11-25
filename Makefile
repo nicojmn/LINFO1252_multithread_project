@@ -15,6 +15,14 @@ all: philosophers producers_consumers
 %.o: %.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@ -c $<
 
+# Test for memory leak
+mem-check: clean all
+	printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./philosophers/philosophers.o 20
+
+	printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./producers_consumers/producers_consumers.o 6 6
+
 # This command clean the project by deleting output file
 clean:
 	rm -f *.o
