@@ -8,8 +8,16 @@
 
 
 // Global variables
-sem_t *sticks;
+pthread_mutex_t *sticks;
 int NUMBER_PHILOSOPHERS;
+
+// Structure for IDs
+
+typedef struct ids {
+    int left_stick;
+    int right_stick;
+} ids_t;
+
 
 /**
  *
