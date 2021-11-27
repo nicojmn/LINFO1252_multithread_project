@@ -14,11 +14,9 @@ sem_t full;
 int init_sem_buffer_states(void);
 void free_sem_buffer_states(void);
 
-_Noreturn void *producer(void);
+void producer(const int *nbr_iter);
 
-_Noreturn void *consumer(void);
-
-void false_hardworking(void);
+void consumer(const int *nbr_iter);
 
 int main(int argc, char **argv);
 #endif //PRODUCER_CONSUMER_H

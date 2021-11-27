@@ -1,4 +1,5 @@
 #include "../headers/buffer_implem.h"
+#include "../../logs_implem/headers/log.h"
 int *buffer;
 int prod_index;
 int cons_index;
@@ -12,6 +13,10 @@ int init_buffer() {
 void free_buffer() {
     free(buffer);
     buffer = NULL;
+}
+
+void false_hardworking(void) {
+    while(rand() > RAND_MAX/10000);
 }
 
 int prod_index_buffer() {
@@ -31,22 +36,11 @@ int produce_elem_buffer(int elem) {
 }
 
 void insert_elem_buffer(int elem) {
+    false_hardworking();
     buffer[prod_index_buffer()] = elem;
 }
 
 int remove_elem_buffer() {
+    false_hardworking();
     return buffer[cons_index_buffer()];
-}
-
-void print_buffer() {
-    printf("-----------\n");
-    printf("Prod Index   =>  %d\n", prod_index);
-    printf("Cons Index   =>  %d\n", cons_index);
-    printf("BUFFER       =>  [");
-    for (int i = 0; i< BUFFER_SIZE; i++) {
-        if (i > 0) printf(", ");
-        printf("%d", buffer[i]);
-    }
-    printf("]\n");
-    printf("-----------\n");
 }

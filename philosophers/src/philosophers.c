@@ -1,4 +1,5 @@
 #include "../headers/philosophers.h"
+#include "../../logs_implem/headers/log.h"
 
 void *philosopher(void *arg) {
 
@@ -25,16 +26,16 @@ void *philosopher(void *arg) {
 }
 
 void eat(int id) {
-    printf("Philosopher %d is eating\n", id);
+    INFO("Philosopher %d is eating", id);
 }
 
 void think(int id) {
-    printf("Philosopher %d is thinking\n", id);
+    INFO("Philosopher %d is thinking", id);
 }
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        fprintf(stderr, "Wrong number of arguments, the program need a number of philosophers in arguments\n");
+        ERROR("Wrong number of arguments, the program need a number of philosophers in arguments");
         return EXIT_FAILURE;
     }
 
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]) {
     int ids[NUMBER_PHILOSOPHERS];
 
     if (philosophers_threads == NULL) {
-        fprintf(stderr, "Memory allocation (malloc) of threads failed\n");
+        ERROR("Memory allocation (malloc) of threads failed");
         return EXIT_FAILURE;
     }
 
@@ -54,32 +55,34 @@ int main(int argc, char *argv[]) {
     }
 
     if (NUMBER_PHILOSOPHERS < 2) {
-        fprintf(stderr, "There must be at least 2 philosophers\n");
+        ERROR("There must be at least 2 philosophers");
         return EXIT_FAILURE;
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
         if (pthread_create(&philosophers_threads[i], NULL, philosopher, (void *) &ids[i]) == 0) {
-            printf("Create thread %d\n", i);
-        } else fprintf(stderr, "Thread cannot be init\n");
+            SUCCESS("Create thread %d", i);
+        } else ERROR("Thread cannot be init");
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
         if (pthread_join(philosophers_threads[i], NULL) != 0) {
-            fprintf(stderr, "Can't join thread\n");
+            ERROR("Can't join thread");
             return EXIT_FAILURE;
         }
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
         if (pthread_mutex_destroy(&sticks[i]) != 0) {
-            fprintf(stderr, "Can't destroy mutex\n");
+            ERROR("Can't destroy mutex");
             return EXIT_FAILURE;
         }
     }
 
     free(philosophers_threads);
+    philosophers_threads = NULL;
     free(sticks);
+    sticks = NULL;
 
     return EXIT_SUCCESS;
 }
