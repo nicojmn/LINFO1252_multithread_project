@@ -7,7 +7,7 @@ void *philosopher(void *arg) {
     int right_stick = (*id + 1) % NUMBER_PHILOSOPHERS;
 
 
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < 5; ++i) { // TODO : change 5 to 100000 - 1
         think(*id);
 
         if (left_stick < right_stick) {
