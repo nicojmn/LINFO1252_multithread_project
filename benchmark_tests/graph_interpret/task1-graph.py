@@ -7,7 +7,7 @@ import pandas
 
 # Producers-consumers problem
 
-csv = pandas.read_csv("time_results/csv/pc.csv")
+csv = pandas.read_csv("time_results/csv/producers-consumers.csv")
 
 threads = [i for i in csv["nthread"]]
 values = [i for i in csv[" time"]]
