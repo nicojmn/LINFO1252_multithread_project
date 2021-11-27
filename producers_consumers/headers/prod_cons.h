@@ -7,11 +7,6 @@
 
 #ifndef PRODUCER_CONSUMER_H
 #define PRODUCER_CONSUMER_H
-// Global Variables
-pthread_mutex_t mutex;
-sem_t empty;
-sem_t full;
-
 /**
  * Initialize the semaphores "empty" and "full"
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
@@ -19,9 +14,9 @@ sem_t full;
 int init_sem_buffer_states(void);
 
 /**
- *  Free the semaphores "empty" and "full" and set them to NULL
+ *  Destroy the mutex and the semaphores "empty" and "full"
  */
-void free_sem_buffer_states(void);
+void free_mutex_sem_buffer_states(void);
 
 /**
  * Produce "nbr_iter" elements

@@ -1,5 +1,9 @@
 #include "../headers/prod_cons.h"
 #include "../../logs_implem/headers/log.h"
+// Private Global Variables
+pthread_mutex_t mutex;
+sem_t empty;
+sem_t full;
 
 int init_sem_buffer_states() {
     int err = sem_init(&empty, 0, BUFFER_SIZE); if (err != 0) return EXIT_FAILURE;
@@ -7,9 +11,10 @@ int init_sem_buffer_states() {
     return EXIT_SUCCESS;
 }
 
-void free_sem_buffer_states() {
+void free_mutex_sem_buffer_states() {
     sem_destroy(&empty);
     sem_destroy(&full);
+    pthread_mutex_destroy(&mutex);
 }
 
 void producer(const int *nbr_iter) {
@@ -75,17 +80,17 @@ int main(int argc, char **argv) {
     for (int i = 0; i < n_threads_prod; i++) {
         err = pthread_create(&(prod_thread[i]), NULL, (void *(*)(void *)) producer, i==0 ? &nbr_iter_prod[1] : &nbr_iter_prod[0]);
         if (err != 0) {
-            ERROR("Cannot initialize the PRODUCER THREAD %d", i+1);
+            ERROR("Cannot initialize the PRODUCER %d", i+1);
             exit(EXIT_FAILURE);
-        } SUCCESS("Producer Thread %d Initialized", i+1);
+        } SUCCESS("Producer %d Initialized", i+1);
     }
 
     for (int i = 0; i < n_threads_cons; i++) {
         err = pthread_create(&(cons_thread[i]), NULL, (void *(*)(void *)) consumer, i==0 ? &nbr_iter_cons[1] : &nbr_iter_cons[0]);
         if (err != 0) {
-            ERROR("Cannot initialize the CONSUMER THREADS");
+            ERROR("Cannot initialize the CONSUMER %d", i+1);
             exit(EXIT_FAILURE);
-        } SUCCESS("Consumer Thread %d Initialized", i+1);
+        } SUCCESS("Consumer %d Initialized", i+1);
     }
 
     INFO("In Processing...");
@@ -93,20 +98,20 @@ int main(int argc, char **argv) {
     for (int i = 0; i < n_threads_prod; i++) {
         err = pthread_join(prod_thread[i], NULL);
         if (err != 0) {
-            ERROR("Cannot JOIN the PRODUCER THREADS");
+            ERROR("Cannot JOIN a PRODUCER");
             exit(EXIT_FAILURE);
         }
-    } SUCCESS("Producer Thread(s) Finished");
+    } SUCCESS("Producer(s) Finished");
 
     for (int i = 0; i < n_threads_cons; i++) {
         err = pthread_join(cons_thread[i], NULL);
         if (err != 0) {
-            ERROR("Cannot JOIN the CONSUMER THREADS");
+            ERROR("Cannot JOIN a CONSUMER");
             exit(EXIT_FAILURE);
         }
-    } SUCCESS("Consumer Thread(s) Finished");
+    } SUCCESS("Consumer(s) Finished");
 
-    free_sem_buffer_states();
+    free_mutex_sem_buffer_states();
     free_buffer();
     return EXIT_SUCCESS;
 }
