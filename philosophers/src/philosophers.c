@@ -3,33 +3,23 @@
 void *philosopher(void *arg) {
 
     int *id = (int *) arg;
-    ids_t *ids = (ids_t *) malloc(sizeof(ids_t));
-    if (ids == NULL) {
-        fprintf(stderr, "Malloc of IDs failed\n");
-        return (void *) EXIT_FAILURE;
-    }
-
-    ids->left_stick = *id;
-    ids->right_stick = *id + 1 % NUMBER_PHILOSOPHERS;
+    int left_stick = *id;
+    int right_stick = (*id + 1) % NUMBER_PHILOSOPHERS;
 
 
-    for (int i = 0; i < 100000; ++i) {
+    for (int i = 0; i < 5; ++i) {
         think(*id);
-        printf("Here\n");
 
-        if (ids->left_stick < ids->right_stick) {
-            printf("Here left\n");
-            pthread_mutex_lock(&sticks[ids->left_stick]);
-            pthread_mutex_lock(&sticks[ids->right_stick]);
-            printf("Left finish");
+        if (left_stick < right_stick) {
+            pthread_mutex_lock(&sticks[left_stick]);
+            pthread_mutex_lock(&sticks[right_stick]);
         } else {
-            printf("Here right\n");
-            pthread_mutex_lock(&sticks[ids->right_stick]);
-            pthread_mutex_lock(&sticks[ids->left_stick]);
+            pthread_mutex_lock(&sticks[right_stick]);
+            pthread_mutex_lock(&sticks[left_stick]);
         }
         eat(*id);
-        pthread_mutex_unlock(&sticks[ids->left_stick]);
-        pthread_mutex_unlock(&sticks[ids->right_stick]);
+        pthread_mutex_unlock(&sticks[left_stick]);
+        pthread_mutex_unlock(&sticks[right_stick]);
     }
     return NULL;
 }
@@ -51,14 +41,11 @@ int main(int argc, char *argv[]) {
     NUMBER_PHILOSOPHERS = atoi(argv[1]);
 
     pthread_t *philosophers_threads = malloc(sizeof(pthread_t) * NUMBER_PHILOSOPHERS);
+    sticks = malloc(sizeof(pthread_mutex_t) * NUMBER_PHILOSOPHERS);
+    int ids[NUMBER_PHILOSOPHERS];
+
     if (philosophers_threads == NULL) {
         fprintf(stderr, "Memory allocation (malloc) of threads failed\n");
-        return EXIT_FAILURE;
-    }
-
-    int *ids = malloc(sizeof(int) * NUMBER_PHILOSOPHERS);
-    if (ids == NULL) {
-        fprintf(stderr, "Memory allocation (malloc) of ids failed\n");
         return EXIT_FAILURE;
     }
 
@@ -72,16 +59,27 @@ int main(int argc, char *argv[]) {
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
-        if (pthread_create(&philosophers_threads[i], NULL, philosopher, (void *) &i) == 0) {
+        if (pthread_create(&philosophers_threads[i], NULL, philosopher, (void *) &ids[i]) == 0) {
             printf("Create thread %d\n", i);
         } else fprintf(stderr, "Thread cannot be init\n");
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
-        pthread_join(philosophers_threads[i], NULL);
+        if (pthread_join(philosophers_threads[i], NULL) != 0) {
+            fprintf(stderr, "Can't join thread\n");
+            return EXIT_FAILURE;
+        }
+    }
+
+    for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
+        if (pthread_mutex_destroy(&sticks[i]) != 0) {
+            fprintf(stderr, "Can't destroy mutex\n");
+            return EXIT_FAILURE;
+        }
     }
 
     free(philosophers_threads);
+    free(sticks);
 
     return EXIT_SUCCESS;
 }
