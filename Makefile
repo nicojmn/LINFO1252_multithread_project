@@ -6,6 +6,7 @@ CFLAGS += -D_COLOR
 LIBS = -lcunit -lpthread
 INCLUDE_HEADERS_DIRECTORY = -Iheaders
 
+## COMPILATIONS
 philosophers: philosophers/src/philosophers.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o "philosophers/"$@.o $^ $(LIBS)
 
@@ -18,6 +19,16 @@ all: philosophers producers_consumers
 %.o: %.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $@ -c $<
 
+
+## RUN PERF EVAL
+#perf_philo:
+#	./benchmark_tests/perf_evals/philoshopher_pe.sh ./time_results/csv/philo.csv
+
+perf_pc:
+	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/pc.csv
+
+
+## TESTS
 # Test for memory leak (
 mem-check: CFLAGS += -D_NOLOGS
 mem-check: clean all
@@ -27,7 +38,7 @@ mem-check: clean all
 	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
 	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./producers_consumers/producers_consumers.o 6 6
 
-## Performs helgrind (safe threads check) test with -q and without -q
+# Performs helgrind (safe threads check) test with -q and without -q
 threads-check: CFLAGS += -D_NOLOGS
 threads-check: clean all
 	@printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
@@ -36,6 +47,8 @@ threads-check: clean all
 	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
 	valgrind --tool=helgrind -s ./producers_consumers/producers_consumers.o 2 3
 
+
+## CLEAN
 # This command clean the project by deleting output file
 clean:
 	rm -f *.o

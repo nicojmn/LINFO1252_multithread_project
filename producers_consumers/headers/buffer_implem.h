@@ -41,6 +41,7 @@ int remove_elem_buffer();
 
 /**
  * Simulate a hard work to make the program more realistic
+ * Compare value changed from RAND_MAX/10000 to RAND_MAX/50000 to better observe the changes in the performance evaluation
  */
 void false_hardworking(void);
 #endif //BUFFER_IMPLEM_H
