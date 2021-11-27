@@ -5,10 +5,6 @@
 #ifndef BUFFER_IMPLEM_H
 #define BUFFER_IMPLEM_H
 #define BUFFER_SIZE 8
-//int *buffer;
-//int prod_index;
-//int cons_index;
-
 /**
  * Initialize the buffer in the HEAP
  * @return  EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise

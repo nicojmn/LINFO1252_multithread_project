@@ -53,5 +53,5 @@ int remove_elem_buffer() {
 }
 
 void false_hardworking(void) {
-    while(rand() > RAND_MAX/50000);
+    while(rand() > RAND_MAX/10000); //50000
 }

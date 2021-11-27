@@ -13,7 +13,10 @@ philosophers: philosophers/src/philosophers.c
 producers_consumers: producers_consumers/src/prod_cons.c producers_consumers/src/buffer_implem.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o "producers_consumers/"$@.o $^ $(LIBS)
 
-all: philosophers producers_consumers
+readers_writers: readers_writers/src/read_write.c
+	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o "readers_writers/"$@.o $^ $(LIBS)
+
+all: philosophers producers_consumers readers_writers
 
 # This command take a C source file and compile it to return a .o file
 %.o: %.c
@@ -38,6 +41,9 @@ mem-check: clean all
 	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
 	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./producers_consumers/producers_consumers.o 6 6
 
+	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./readers_writers/readers_writers.o 3 6
+
 # Performs helgrind (safe threads check) test with -q and without -q
 threads-check: CFLAGS += -D_NOLOGS
 threads-check: clean all
@@ -46,6 +52,9 @@ threads-check: clean all
 
 	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
 	valgrind --tool=helgrind -s ./producers_consumers/producers_consumers.o 2 3
+
+	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
+	valgrind --tool=helgrind -s ./readers_writers/readers_writers.o 2 3
 
 
 
@@ -62,5 +71,6 @@ clean:
 	rm -f *.o
 	rm -f ./philosophers/*.o
 	rm -f ./producers_consumers/*.o
+	rm -f ./readers_writers/*.o
 
-.PHONY: clean philosophers producers_consumers graph
+.PHONY: clean philosophers producers_consumers readers_writers graph
