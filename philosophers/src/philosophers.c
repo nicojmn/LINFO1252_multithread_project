@@ -8,7 +8,7 @@ void *philosopher(void *arg) {
     int right_stick = (*id + 1) % NUMBER_PHILOSOPHERS;
 
 
-    for (int i = 0; i < 5; ++i) { // TODO : change 5 to 100000 - 1
+    for (int i = 0; i < 100000; ++i) {
         think(*id);
 
         if (left_stick < right_stick) {
@@ -26,11 +26,11 @@ void *philosopher(void *arg) {
 }
 
 void eat(int id) {
-    INFO("Philosopher %d is eating", id);
+    // Philosopher is eating
 }
 
 void think(int id) {
-    INFO("Philosopher %d is thinking", id);
+    // Philosopher is thinking
 }
 
 int main(int argc, char *argv[]) {
@@ -62,7 +62,10 @@ int main(int argc, char *argv[]) {
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
         if (pthread_create(&philosophers_threads[i], NULL, philosopher, (void *) &ids[i]) == 0) {
             SUCCESS("Create thread %d", i);
-        } else ERROR("Thread cannot be init");
+        } else {
+            ERROR("Thread cannot be init");
+            return EXIT_FAILURE;
+        }
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {

@@ -44,7 +44,7 @@ mem-check: clean all
 	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
 	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./readers_writers/readers_writers.o 3 6
 
-# Performs helgrind (safe threads check) test with -q and without -q
+# Performs helgrind (safe threads check) test
 threads-check: CFLAGS += -D_NOLOGS
 threads-check: clean all
 	@printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
