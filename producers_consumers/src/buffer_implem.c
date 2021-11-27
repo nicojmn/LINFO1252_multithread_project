@@ -1,5 +1,6 @@
 #include "../headers/buffer_implem.h"
 #include "../../logs_implem/headers/log.h"
+// Private Global Variables
 int *buffer;
 int prod_index;
 int cons_index;
@@ -15,16 +16,22 @@ void free_buffer() {
     buffer = NULL;
 }
 
-void false_hardworking(void) {
-    while(rand() > RAND_MAX/10000);
-}
-
+/**
+ * --Private Function--
+ * Increase the current value of "prod_index" in [0, BUFFER_SIZE] interval
+ * @return the current value of "prod_index" (not increased !!)
+ */
 int prod_index_buffer() {
     int temp = prod_index;
     prod_index = (prod_index + 1) % BUFFER_SIZE;
     return temp;
 }
 
+/**
+ * --Private Function--
+ * Increase the current value of "cons_index" in [0, BUFFER_SIZE] interval
+ * @return the current value of "cons_index" (not increased !!)
+ */
 int cons_index_buffer() {
     int temp = cons_index;
     cons_index = (cons_index + 1) % BUFFER_SIZE;
@@ -43,4 +50,8 @@ void insert_elem_buffer(int elem) {
 int remove_elem_buffer() {
     false_hardworking();
     return buffer[cons_index_buffer()];
+}
+
+void false_hardworking(void) {
+    while(rand() > RAND_MAX/10000);
 }
