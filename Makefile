@@ -23,6 +23,10 @@ mem-check: clean all
 	printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
 	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./producers_consumers/producers_consumers.o 6 6
 
+## Performs helgrind (safe threads check) test with -q and without -q
+threads-check: clean philosophers # TODO : add all when prodcons will be ready in quiet mode
+	valgrind --tool=helgrind -s ./philosophers/philosophers.o 10
+
 # This command clean the project by deleting output file
 clean:
 	rm -f *.o
