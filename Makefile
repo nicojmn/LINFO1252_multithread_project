@@ -48,6 +48,14 @@ threads-check: clean all
 	valgrind --tool=helgrind -s ./producers_consumers/producers_consumers.o 2 3
 
 
+
+## GRAPHS
+
+# Produce graph
+graph:
+	/usr/bin/python3 ./benchmark_tests/graph_interpret/task1-graph.py
+
+
 ## CLEAN
 # This command clean the project by deleting output file
 clean:
@@ -55,4 +63,4 @@ clean:
 	rm -f ./philosophers/*.o
 	rm -f ./producers_consumers/*.o
 
-.PHONY: clean philosophers producers_consumers
+.PHONY: clean philosophers producers_consumers graph
