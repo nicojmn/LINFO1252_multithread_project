@@ -24,8 +24,8 @@ all: philosophers producers_consumers readers_writers
 
 
 ## RUN PERF EVAL
-#perf_philo:
-#	./benchmark_tests/perf_evals/philoshopher_pe.sh ./time_results/csv/philo.csv
+perf_philo:
+	./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers.csv
 
 perf_pc:
 	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/pc.csv
