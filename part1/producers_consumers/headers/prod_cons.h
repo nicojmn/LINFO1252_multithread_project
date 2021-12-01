@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <pthread.h>
 #include <semaphore.h>
-#include "../headers/buffer_implem.h"
+#include "buffer_implem.h"
 
 #ifndef PRODUCER_CONSUMER_H
 #define PRODUCER_CONSUMER_H

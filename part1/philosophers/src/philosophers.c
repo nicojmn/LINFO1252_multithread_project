@@ -1,5 +1,5 @@
 #include "../headers/philosophers.h"
-#include "../../logs_implem/headers/log.h"
+#include "../../../logs_implem/headers/log.h"
 
 void *philosopher(void *arg) {
 

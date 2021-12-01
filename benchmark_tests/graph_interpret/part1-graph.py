@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -10,7 +12,7 @@ import pandas as pd
 ==========================
 """
 
-philosophers_csv = pd.read_csv("time_results/csv/philosophers.csv")
+philosophers_csv = pd.read_csv("time_results/csv/philosophers_posix.csv")
 
 # We get the maximum thread by looking at the last line of the CSV
 # We don't use os.cpu_count() because the user can run benchmark test on an pc and make graph on another one
@@ -55,7 +57,7 @@ plt.close()
 =================================
 """
 
-producers_consumers_csv = pd.read_csv("time_results/csv/producers-consumers.csv")
+producers_consumers_csv = pd.read_csv("time_results/csv/producers-consumers_posix.csv")
 
 # We get the maximum thread by looking at the last line of the CSV
 # We don't use os.cpu_count() because the user can run benchmark test on an pc and make graph on another one
@@ -100,7 +102,7 @@ plt.close()
 ===========================
 """
 
-readers_writers_csv = pd.read_csv("time_results/csv/readers-writers.csv")
+readers_writers_csv = pd.read_csv("time_results/csv/readers-writers_posix.csv")
 
 # We get the maximum thread by looking at the last line of the CSV
 # We don't use os.cpu_count() because the user can run benchmark test on an pc and make graph on another one

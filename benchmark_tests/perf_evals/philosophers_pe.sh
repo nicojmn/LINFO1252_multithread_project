@@ -9,11 +9,11 @@ MAXTHREAD=$(("$CORENUMBER" * 2))
 echo "nThread,iteration,time" >"${FILENAME}"
 
 #Values
-make -s -j CFLAGS+="-D_NOLOGS" philosophers
+make -s -j CFLAGS+="-D_NOLOGS" philosophers_posix
 for PHILOSOPHERS in $(eval echo "{2..$MAXTHREAD}"); do
   #CSV DATA
   for i in {1..5}; do
-    iTime=$(/usr/bin/time -f "%e" ./philosophers/philosophers.o "$PHILOSOPHERS" 2>&1 | tail -n 1)
+    iTime=$(/usr/bin/time -f "%e" ./part1/philosophers/philosophers_posix.o "$PHILOSOPHERS" 2>&1 | tail -n 1)
     echo "$PHILOSOPHERS","$i","$iTime" >>"$FILENAME"
   done
 done
