@@ -2,17 +2,15 @@
 FILENAME=${1}
 
 #CSV HEADER
-echo "nThread,iteration,time" > "${FILENAME}"
+echo "nThread,iteration,time" >"${FILENAME}"
 
 #Values
 make -s -j CFLAGS+="-D_NOLOGS" philosophers
-for PHILOSOPHERS in 2 4 6 8 16
-do
+for PHILOSOPHERS in 2 4 6 8 16; do
   #CSV DATA
-  for i in {1..5}
-  do
+  for i in {1..5}; do
     iTime=$(/usr/bin/time -f "%e" ./philosophers/philosophers.o "$PHILOSOPHERS" 2>&1 | tail -n 1)
-    echo "$PHILOSOPHERS","$i","$iTime" >> "$FILENAME"
+    echo "$PHILOSOPHERS","$i","$iTime" >>"$FILENAME"
   done
 done
 

@@ -27,8 +27,8 @@ all: philosophers producers_consumers readers_writers
 perf_philo:
 	./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers.csv
 
-perf_pc:
-	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/pc.csv
+perf_prod_cons:
+	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers.csv
 
 
 ## TESTS
