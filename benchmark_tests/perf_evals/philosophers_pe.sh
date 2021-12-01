@@ -1,12 +1,16 @@
 #!/usr/bin/bash
 FILENAME=${1}
 
+# Pick the number of physical threads and multiply by 2
+CORENUMBER=$(grep "cpu cores" /proc/cpuinfo | uniq| awk '{print $4}')
+MAXTHREAD=$(("$CORENUMBER" * 2))
+
 #CSV HEADER
 echo "nThread,iteration,time" >"${FILENAME}"
 
 #Values
 make -s -j CFLAGS+="-D_NOLOGS" philosophers
-for PHILOSOPHERS in 2 4 6 8 16; do
+for PHILOSOPHERS in $(eval echo "{2..$MAXTHREAD}"); do
   #CSV DATA
   for i in {1..5}; do
     iTime=$(/usr/bin/time -f "%e" ./philosophers/philosophers.o "$PHILOSOPHERS" 2>&1 | tail -n 1)

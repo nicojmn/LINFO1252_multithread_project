@@ -12,6 +12,12 @@ import pandas as pd
 
 philosophers_csv = pd.read_csv("time_results/csv/philosophers.csv")
 
+# We get the maximum thread by looking at the last line of the CSV
+# We don't use os.cpu_count() because the user can run benchmark test on an pc and make graph on another one
+# So to have the same max thread we search in the CSV
+thread_column = list(philosophers_csv["nThread"])
+max_thread = thread_column[len(thread_column) - 1]
+
 threads = np.unique([i for i in philosophers_csv["nThread"]])
 values = []
 std = []
@@ -27,13 +33,14 @@ plt.errorbar(threads, values, color="orange", label="Écart type", yerr=std, fmt
 plt.xlabel("Nombre de threads")
 plt.ylabel("Temps d'exécution (en secondes)")
 
+plt.xticks(np.linspace(0, max_thread, max_thread + 1))
 plt.xlim(left=0)
 plt.ylim(bottom=0)
 
 plt.title("Temps d'exécution des threads pour le problème des philosophes")
 plt.grid(True)
 
-plt.legend(loc='upper right')
+plt.legend(loc='lower right')
 
 plt.savefig("benchmark_tests/philosophers.png")
 plt.savefig("benchmark_tests/philosophers.pdf")
@@ -50,6 +57,12 @@ plt.close()
 
 producers_consumers_csv = pd.read_csv("time_results/csv/producers-consumers.csv")
 
+# We get the maximum thread by looking at the last line of the CSV
+# We don't use os.cpu_count() because the user can run benchmark test on an pc and make graph on another one
+# So to have the same max thread we search in the CSV
+thread_column = list(producers_consumers_csv["nThread"])
+max_thread = thread_column[len(thread_column) - 1]
+
 threads = [i for i in producers_consumers_csv["nThread"]]
 values = []
 std = []
@@ -65,13 +78,14 @@ plt.errorbar(threads, values, color="orange", label="Écart type", yerr=std, fmt
 plt.xlabel("Nombre de threads")
 plt.ylabel("Temps d'exécution (en secondes)")
 
+plt.xticks(np.linspace(0, max_thread, max_thread + 1))
 plt.xlim(left=0)
 plt.ylim(bottom=0)
 
-plt.title("Temps d'exécution des threads pour le problème des producteurs consommateurs")
+plt.title("Temps d'exécution des threads pour\nle problème des producteurs consommateurs")
 plt.grid(True)
 
-plt.legend(loc='upper right')
+plt.legend(loc='lower right')
 
 plt.savefig("benchmark_tests/producers-consumers.png")
 plt.savefig("benchmark_tests/producers-consumers.pdf")
@@ -85,9 +99,14 @@ plt.close()
 ||                       ||
 ===========================
 """
-# Todo : reader-writer
 
 readers_writers_csv = pd.read_csv("time_results/csv/readers-writers.csv")
+
+# We get the maximum thread by looking at the last line of the CSV
+# We don't use os.cpu_count() because the user can run benchmark test on an pc and make graph on another one
+# So to have the same max thread we search in the CSV
+thread_column = list(philosophers_csv["nThread"])
+max_thread = thread_column[len(thread_column) - 1]
 
 threads = [i for i in readers_writers_csv["nThread"]]
 values = []
@@ -104,10 +123,11 @@ plt.errorbar(threads, values, color="orange", label="Écart type", yerr=std, fmt
 plt.xlabel("Nombre de threads")
 plt.ylabel("Temps d'exécution (en secondes)")
 
+plt.xticks(np.linspace(0, max_thread, max_thread + 1))
 plt.xlim(left=0)
 plt.ylim(bottom=0)
 
-plt.title("Temps d'exécution des threads pour le problème des lecteurs écrivans")
+plt.title("Temps d'exécution des threads pour\nle problème des lecteurs écrivans")
 plt.grid(True)
 
 plt.legend(loc='upper right')
