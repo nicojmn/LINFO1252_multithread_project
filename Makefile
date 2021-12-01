@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Werror -g -std=gnu99
 # Used to colorize the output. Remove if we need to extracts logs_implem
 CFLAGS += -D_COLOR
-LIBS = -lcunit -lpthread
+LIBS = -lpthread
 INCLUDE_HEADERS_DIRECTORY = -Iheaders
 
 ## COMPILATIONS
@@ -32,9 +32,9 @@ all: philosophers_posix producers_consumers_posix readers_writers_posix test_and
 ## RUN PERF EVAL
 
 perf_posix:
-	/usr/bin/bash ./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers_posix.csv
-	/usr/bin/bash ./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers_posix.csv
-	/usr/bin/bash ./benchmark_tests/perf_evals/readers_writers_pe.sh ./time_results/csv/readers-writers_posix.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/philosophers_pe_posix.sh ./time_results/csv/philosophers_posix.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/producers_consumers_pe_posix.sh ./time_results/csv/producers-consumers_posix.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/readers_writers_pe_posix.sh ./time_results/csv/readers-writers_posix.csv
 
 ## TESTS
 # Test for memory leak
