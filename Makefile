@@ -38,14 +38,14 @@ perf_prod_cons:
 # Test for memory leak (
 mem-check: CFLAGS += -D_NOLOGS
 mem-check: clean all
-#	@printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./philosophers/philosophers.o 20
-#
-#	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./producers_consumers/producers_consumers.o 6 6
-#
-#	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./readers_writers/readers_writers.o 3 6
+	@printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./philosophers/philosophers.o 20
+
+	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./producers_consumers/producers_consumers.o 6 6
+
+	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./readers_writers/readers_writers.o 3 6
 
 	@printf "\n\n===================================================\n||  Memory test for test_and_set algorithm  ||\n===================================================\n\n"
 	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./active_lock/test_and_set.o 4
@@ -53,14 +53,14 @@ mem-check: clean all
 # Performs helgrind (safe threads check) test
 threads-check: CFLAGS += -D_NOLOGS
 threads-check: clean all
-#	@printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
-#	valgrind --tool=helgrind -s ./philosophers/philosophers.o 10
-#
-#	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
-#	valgrind --tool=helgrind -s ./producers_consumers/producers_consumers.o 2 3
-#
-#	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
-#	valgrind --tool=helgrind -s ./readers_writers/readers_writers.o 2 3
+	@printf "\n\n============================================\n||  Memory test for philosophers problem  ||\n============================================\n\n"
+	valgrind --tool=helgrind -s ./philosophers/philosophers.o 10
+
+	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem  ||\n===================================================\n\n"
+	valgrind --tool=helgrind -s ./producers_consumers/producers_consumers.o 2 3
+
+	@printf "\n\n===================================================\n||  Memory test for readers-writers problem  ||\n===================================================\n\n"
+	valgrind --tool=helgrind -s ./readers_writers/readers_writers.o 2 3
 
 	@printf "\n\n===================================================\n||  Memory test for test_and_set algorithm  ||\n===================================================\n\n"
 	valgrind --tool=helgrind -s ./active_lock/test_and_set.o 4
