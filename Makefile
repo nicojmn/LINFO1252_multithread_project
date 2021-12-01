@@ -28,18 +28,18 @@ all: philosophers producers_consumers readers_writers test_and_set
 
 ## RUN PERF EVAL
 perf_philo:
-	./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers.csv
 
 perf_prod_cons:
-	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers.csv
 
 perf_readers_writers:
-	./benchmark_tests/perf_evals/readers_writers_pe.sh ./time_results/csv/readers-writers.csv
+	/usr/bin/bash benchmark_tests/perf_evals/readers_writers_pe.sh ./time_results/csv/readers-writers.csv
 
 perf_all:
-	./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers.csv
-	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers.csv
-	./benchmark_tests/perf_evals/readers_writers_pe.sh ./time_results/csv/readers-writers.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/philosophers_pe.sh ./time_results/csv/philosophers.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/readers_writers_pe.sh ./time_results/csv/readers-writers.csv
 
 ## TESTS
 # Test for memory leak (
