@@ -1,5 +1,5 @@
 #include "../headers/active_lock.h"
-#include "../../../logs_implem/headers/log.h"
+#include "../../logs_implem/headers/log.h"
 
 int *lock_var;
 
