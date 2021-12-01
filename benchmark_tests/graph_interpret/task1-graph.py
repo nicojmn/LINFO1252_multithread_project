@@ -1,16 +1,39 @@
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas
 
 # Philosopher problem
 
-# Todo : philosopher
+philosophers_csv = pandas.read_csv("time_results/csv/philosophers.csv")
+
+threads = np.unique([i for i in philosophers_csv["nThread"]])
+values = []
+
+for thread in threads:
+    sub_dataset = philosophers_csv.loc[philosophers_csv.nThread == thread]
+    values.append(sum(list(x for x in sub_dataset["time"])) / 5)
+
+plt.plot(threads, values, color="blue", label="Valeur moyenne")
+
+plt.xlabel("Nombre de threads")
+plt.ylabel("Temps d'exécution (en secondes)")
+
+plt.title("Temps d'exécution des threads pour le problème des philosophes")
+plt.grid(True)
+
+plt.legend(loc='upper right')
+
+plt.savefig("benchmark_tests/philosophers.png")
+plt.savefig("benchmark_tests/philosophers.pdf")
+
+plt.close()
 
 # Producers-consumers problem
 
-csv = pandas.read_csv("time_results/csv/producers-consumers.csv")
+producers_consumers_csv = pandas.read_csv("time_results/csv/producers-consumers.csv")
 
-threads = [i for i in csv["nthread"]]
-values = [i for i in csv[" time"]]
+threads = [i for i in producers_consumers_csv["nthread"]]
+values = [i for i in producers_consumers_csv[" time"]]
 
 plt.plot(threads, values, color="blue", label="Time execution")
 
@@ -22,8 +45,8 @@ plt.grid(True)
 
 plt.legend(loc='upper right')
 
-plt.savefig("./benchmark_tests/philosophers.png")
-plt.savefig("./benchmark_tests/philosophers.pdf")
+plt.savefig("benchmark_tests/producers-consumers.png")
+plt.savefig("benchmark_tests/producers-consumers.pdf")
 
 plt.close()
 
