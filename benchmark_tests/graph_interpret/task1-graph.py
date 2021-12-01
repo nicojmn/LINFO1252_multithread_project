@@ -78,3 +78,29 @@ plt.close()
 ===========================
 """
 # Todo : reader-writer
+
+readers_writers_csv = pd.read_csv("time_results/csv/readers-writers.csv")
+
+threads = [i for i in readers_writers_csv["nThread"]]
+values = []
+
+for thread in threads:
+    sub_dataset = readers_writers_csv.loc[readers_writers_csv.nThread == thread]
+    values.append(np.mean(sub_dataset["time"]))
+
+plt.plot(threads, values, color="blue", label="Valeur moyenne")
+
+plt.xlabel("Nombre de threads")
+plt.ylabel("Temps d'exécution (en secondes)")
+
+plt.ylim(bottom=0)
+
+plt.title("Temps d'exécution des threads pour le problème des lecteurs écrivans")
+plt.grid(True)
+
+plt.legend(loc='upper right')
+
+plt.savefig("benchmark_tests/readers-writers.png")
+plt.savefig("benchmark_tests/readers-writers.pdf")
+
+plt.close()

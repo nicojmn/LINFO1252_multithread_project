@@ -29,7 +29,8 @@ perf_philo:
 
 perf_prod_cons:
 	./benchmark_tests/perf_evals/producers_consumers_pe.sh ./time_results/csv/producers-consumers.csv
-
+perf_readers_writers:
+	./benchmark_tests/perf_evals/readers_writers_pe.sh ./time_results/csv/readers-writers.csv
 
 ## TESTS
 # Test for memory leak (
