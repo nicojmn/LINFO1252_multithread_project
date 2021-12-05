@@ -44,8 +44,8 @@ plt.grid(True)
 
 plt.legend(loc='lower right')
 
-plt.savefig("benchmark_tests/philosophers.png")
-plt.savefig("benchmark_tests/philosophers.pdf")
+plt.savefig("benchmark_tests/philosophers_posix.png")
+plt.savefig("benchmark_tests/philosophers_posix.pdf")
 
 plt.close()
 
@@ -89,8 +89,8 @@ plt.grid(True)
 
 plt.legend(loc='lower right')
 
-plt.savefig("benchmark_tests/producers-consumers.png")
-plt.savefig("benchmark_tests/producers-consumers.pdf")
+plt.savefig("benchmark_tests/producers-consumers_posix.png")
+plt.savefig("benchmark_tests/producers-consumers_posix.pdf")
 
 plt.close()
 
@@ -134,7 +134,7 @@ plt.grid(True)
 
 plt.legend(loc='upper right')
 
-plt.savefig("benchmark_tests/readers-writers.png")
-plt.savefig("benchmark_tests/readers-writers.pdf")
+plt.savefig("benchmark_tests/readers-writers_posix.png")
+plt.savefig("benchmark_tests/readers-writers_posix.pdf")
 
 plt.close()
