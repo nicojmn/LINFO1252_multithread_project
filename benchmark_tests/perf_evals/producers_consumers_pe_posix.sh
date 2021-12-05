@@ -1,6 +1,14 @@
 #!/usr/bin/bash
 FILENAME=${1}
 
+if [ -f "$FILENAME" ]; then
+    echo "$FILENAME" found
+else
+  echo "$FILENAME" does not exist. Creating a blank csv
+  mkdir -p "$(dirname "$FILENAME")"
+  touch "$(dirname "$FILENAME")"/"$(basename "$FILENAME")"
+fi
+
 # Pick the number of physical threads and DON'T multiply by 2, because whe use the variable twice
 CORENUMBER=$(grep "cpu cores" /proc/cpuinfo | uniq| awk '{print $4}')
 
