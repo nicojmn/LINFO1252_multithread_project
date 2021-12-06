@@ -1,5 +1,5 @@
 #include "../headers/buffer_implem.h"
-#include "../../../logs_implem/headers/log.h"
+#include "../../../logs/headers/log.h"
 // Private Global Variables
 int *buffer;
 int prod_index;

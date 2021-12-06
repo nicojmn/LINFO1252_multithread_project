@@ -10,10 +10,16 @@
 int init_lock(void);
 
 /**
- * Deny access to critical path for threads which don't have a grant access
+ * Deny access to critical path for threads which don't have a grant access (test_and_test_and_set algorithm)
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
  */
 int lock(void);
+
+/**
+ * Deny access to critical path for threads which don't have a grant access (test_and_set algorithm)
+ * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
+ */
+int lock_ts(void);
 
 /**
  * Free the access to the critical path for others threads

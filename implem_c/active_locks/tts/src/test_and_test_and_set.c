@@ -1,5 +1,5 @@
-#include "../headers/active_lock.h"
-#include "../../logs_implem/headers/log.h"
+#include "../headers/test_and_test_and_set.h"
+#include "../../../logs/headers/log.h"
 
 int *lock_var;
 
