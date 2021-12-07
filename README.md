@@ -60,7 +60,7 @@ Ce projet se compile grâce à un **Makefile**. Il supporte les commandes suivan
 
 - `make pc_quickspin T1=N T2=M` => Exécute le problème des producteurs-consomateurs (QUICKSPIN) [où N = #threads_producteurs & M = #threads_consommateurs]
 
-- `make rw_quickspin T1=N T2=M` => Exécute le problème des lecteurs et écrivains (QUICKSPIN)
+- `make rw_quickspin T1=N T2=M` => Exécute le problème des lecteurs et écrivains (QUICKSPIN) [où N = #threads_écrivains & M = #threads_lecteurs]
 
 
 
