@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#ifndef ACTIVE_LOCK_H
+#ifndef TTS_H
 /**
  * The lock structure with the lock variable
  */
@@ -33,6 +33,6 @@ int lock(locker_t *locker);
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
  */
 int unlock(locker_t *locker);
-#define ACTIVE_LOCK_H
+#define TTS_H
 
-#endif // ACTIVE_LOCK_H
+#endif // TTS_H

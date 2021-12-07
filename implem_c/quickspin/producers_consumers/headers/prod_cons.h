@@ -5,8 +5,8 @@
 #include "../../../active_locks/semaphore/headers/semaphore.h"
 #include "../../../posix/producers_consumers/headers/buffer_implem.h"
 
-#ifndef PRODUCER_CONSUMER_H
-#define PRODUCER_CONSUMER_H
+#ifndef PRODUCER_CONSUMER_QS_H
+#define PRODUCER_CONSUMER_QS_H
 typedef struct _arg arg_t;
 
 /**
@@ -28,4 +28,4 @@ void consumer(arg_t *args);
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
  */
 int main(int argc, char **argv);
-#endif //PRODUCER_CONSUMER_H
+#endif //PRODUCER_CONSUMER_QS_H

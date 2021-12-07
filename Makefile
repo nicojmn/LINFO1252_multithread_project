@@ -64,7 +64,7 @@ build_$(TTS): $(MUTEX)/$(TTS)/src/test_and_test_and_set.c $(MUTEX)/$(TTS)/src/te
 
 build_all_posix: build_$(PHILO_POS) build_$(PC_POS) build_$(RW_POS)
 build_all_quickspin: build_$(PHILO_QS) build_$(PC_QS) build_$(RW_QS)
-build_all_locks: build_$(TTS) #build_$(TS)
+build_all_locks: build_$(TS) build_$(TTS)
 
 build_all: build_all_posix build_all_quickspin build_all_locks
 all: build_all
@@ -95,23 +95,23 @@ $(TTS):
 # Test for memory leak
 mem-check: CFLAGS += -D_NOLOGS
 mem-check: clean all
-#	@printf "\n\n============================================\n||  Memory test for philosophers problem (POSIX)  ||\n============================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PHILO)/$(PHILO_POS).o 20
-#
-#	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (POSIX)  ||\n===================================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PC)/$(PC_POS).o 6 6
-#
-#	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (POSIX)  ||\n===================================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(RW)/$(RW_POS).o 3 6
-#
-#	@printf "\n\n============================================\n||  Memory test for philosophers problem (QUICKSPIN)  ||\n============================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o 20
-#
-#	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (QUICKSPIN)  ||\n===================================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PC)/$(PC_QS).o 6 6
-#
-#	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (QUICKSPIN)  ||\n===================================================\n\n"
-#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(RW)/$(RW_QS).o 3 6
+	@printf "\n\n============================================\n||  Memory test for philosophers problem (POSIX)  ||\n============================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PHILO)/$(PHILO_POS).o 20
+
+	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (POSIX)  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PC)/$(PC_POS).o 6 6
+
+	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (POSIX)  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(RW)/$(RW_POS).o 3 6
+
+	@printf "\n\n============================================\n||  Memory test for philosophers problem (QUICKSPIN)  ||\n============================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o 20
+
+	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (QUICKSPIN)  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PC)/$(PC_QS).o 6 6
+
+	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (QUICKSPIN)  ||\n===================================================\n\n"
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(RW)/$(RW_QS).o 3 6
 
 	@printf "\n\n===================================================\n||  Memory test for test_and_set algorithm  ||\n===================================================\n\n"
 	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(MUTEX)/$(TS)/$(TS).o 4

@@ -5,8 +5,8 @@
 #include <semaphore.h>
 #include "buffer_implem.h"
 
-#ifndef PRODUCER_CONSUMER_H
-#define PRODUCER_CONSUMER_H
+#ifndef PRODUCER_CONSUMER_POSIX_H
+#define PRODUCER_CONSUMER_POSIX_H
 /**
  * Initialize the semaphores "empty" and "full"
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise

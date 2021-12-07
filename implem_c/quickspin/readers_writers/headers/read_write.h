@@ -4,8 +4,8 @@
 #include <pthread.h>
 #include <semaphore.h>
 
-#ifndef READ_WRITE_H
-#define READ_WRITE_H
+#ifndef READ_WRITE_QS_H
+#define READ_WRITE_QS_H
 /**
  * Initialize all the semaphores used in the program
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
@@ -47,4 +47,4 @@ void reader(const int *nbr_iter);
  * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
  */
 int main(int argc, char **argv);
-#endif //READ_WRITE_H
+#endif //READ_WRITE_QS_H

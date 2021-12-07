@@ -1,5 +1,5 @@
-#ifndef LINFO1252_PROJET_PHILOSOPHERS_H
-#define LINFO1252_PROJET_PHILOSOPHERS_H
+#ifndef PHILO_POSIX_H
+#define PHILO_POSIX_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,4 +34,4 @@ void think(int id);
  */
 int main(int argc, char *argv[]);
 
-#endif //LINFO1252_PROJET_PHILOSOPHERS_H
+#endif //PHILO_POSIX_H
