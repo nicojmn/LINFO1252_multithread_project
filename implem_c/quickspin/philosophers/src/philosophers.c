@@ -1,6 +1,4 @@
 #include "../headers/philosophers.h"
-#include "../../../active_locks/semaphore/headers/semaphore.h"
-#include "../../../logs/headers/log.h"
 
 void *philosopher(void *arg) {
 
@@ -13,15 +11,15 @@ void *philosopher(void *arg) {
         think(*id);
 
         if (left_stick < right_stick) {
-            pthread_mutex_lock(&sticks[left_stick]);
-            pthread_mutex_lock(&sticks[right_stick]);
+            lock(sticks[left_stick]);
+            lock(sticks[right_stick]);
         } else {
-            pthread_mutex_lock(&sticks[right_stick]);
-            pthread_mutex_lock(&sticks[left_stick]);
+            lock(sticks[right_stick]);
+            lock(sticks[left_stick]);
         }
         eat(*id);
-        pthread_mutex_unlock(&sticks[left_stick]);
-        pthread_mutex_unlock(&sticks[right_stick]);
+        unlock(sticks[left_stick]);
+        unlock(sticks[right_stick]);
     }
     return NULL;
 }
@@ -43,7 +41,11 @@ int main(int argc, char *argv[]) {
     NUMBER_PHILOSOPHERS = atoi(argv[1]);
 
     pthread_t *philosophers_threads = malloc(sizeof(pthread_t) * NUMBER_PHILOSOPHERS);
-    sticks = malloc(sizeof(pthread_mutex_t) * NUMBER_PHILOSOPHERS);
+
+    sticks = malloc(sizeof(locker_t * ) * NUMBER_PHILOSOPHERS);
+    for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
+        sticks[i] = init_lock();
+    }
     int ids[NUMBER_PHILOSOPHERS];
 
     if (philosophers_threads == NULL) {
@@ -77,10 +79,7 @@ int main(int argc, char *argv[]) {
     }
 
     for (int i = 0; i < NUMBER_PHILOSOPHERS; ++i) {
-        if (pthread_mutex_destroy(&sticks[i]) != 0) {
-            ERROR("Can't destroy mutex");
-            return EXIT_FAILURE;
-        }
+        destroy_lock(sticks[i]);
     }
 
     free(philosophers_threads);

@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 
+import os
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+
+
+def create_dir_if_not_exist(filepath):
+    directory = os.path.dirname(filepath)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
 
 """
 ==========================
@@ -44,8 +53,11 @@ plt.grid(True)
 
 plt.legend(loc='lower right')
 
-plt.savefig("benchmark_tests/philosophers_posix.png")
-plt.savefig("benchmark_tests/philosophers_posix.pdf")
+create_dir_if_not_exist("time_results/graphs/images/philosophers_posix.png")
+create_dir_if_not_exist("time_results/graphs/pdf/philosophers_posix.pdf")
+
+plt.savefig("time_results/graphs/images/philosophers_posix.png")
+plt.savefig("time_results/graphs/pdf/philosophers_posix.pdf")
 
 plt.close()
 
@@ -89,8 +101,11 @@ plt.grid(True)
 
 plt.legend(loc='lower right')
 
-plt.savefig("benchmark_tests/producers-consumers_posix.png")
-plt.savefig("benchmark_tests/producers-consumers_posix.pdf")
+create_dir_if_not_exist("time_results/graphs/images/producers-consumers_posix.png")
+create_dir_if_not_exist("time_results/graphs/pdf/producers-consumers_posix.pdf")
+
+plt.savefig("time_results/graphs/images/producers-consumers_posix.png")
+plt.savefig("time_results/graphs/pdf/producers-consumers_posix.pdf")
 
 plt.close()
 
@@ -134,7 +149,10 @@ plt.grid(True)
 
 plt.legend(loc='upper right')
 
-plt.savefig("benchmark_tests/readers-writers_posix.png")
-plt.savefig("benchmark_tests/readers-writers_posix.pdf")
+create_dir_if_not_exist("time_results/graphs/images/readers-writers_posix.png")
+create_dir_if_not_exist("time_results/graphs/pdf/readers-writers_posix.pdf")
+
+plt.savefig("time_results/graphs/images/readers-writers_posix.png")
+plt.savefig("time_results/graphs/pdf/readers-writers_posix.pdf")
 
 plt.close()

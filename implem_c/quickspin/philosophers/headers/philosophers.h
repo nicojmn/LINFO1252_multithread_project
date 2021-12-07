@@ -3,12 +3,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
-#include <semaphore.h>
+#include "../../../active_locks/mutex/tts/headers/test_and_test_and_set.h"
+#include "../../../logs/headers/log.h"
 
 
 // Global variables
-pthread_mutex_t *sticks;
+locker_t **sticks;
 int NUMBER_PHILOSOPHERS;
 
 
