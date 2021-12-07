@@ -8,10 +8,11 @@ LIBS = -lpthread
 INCLUDE_HEADERS_DIRECTORY = -Iheaders
 
 ## SECONDS VARIABLES
-T1 = 8
-T2 = 8
+T1 = 2
+T2 = 2
 
 ## PATHS
+# BUILD
 POSIX = implem_c/posix
 QUICKSPIN = implem_c/quickspin
 MUTEX = implem_c/active_locks/mutex
@@ -20,16 +21,21 @@ PHILO = philosophers
 PC = producers_consumers
 RW = readers_writers
 
+# RUN
 PHILO_POS = philo_posix
 PC_POS = pc_posix
 RW_POS = rw_posix
-
 PHILO_QS = philo_quickspin
 PC_QS = pc_quickspin
 RW_QS = rw_quickspin
-
 TS = ts
 TTS = tts
+
+# ZIP
+DIR_NAME = groupe50_Jadin_Jeanmenne
+ZIP_NAME = ./$(DIR_NAME).zip
+FILES = benchmark_tests implem_c Makefile README.md
+
 
 ## TOOLS
 # This command take a C source file and compile it to return a .o file
@@ -167,4 +173,12 @@ clean:
 	@rm -f `find . -type f -name '*.o'`
 	@printf "All '*.o' files cleaned in the 'implem_c' directory\n"
 
-.PHONY: clean all
+## ZIP
+zip: clean
+	@mkdir ${DIR_NAME}
+	@$(foreach file,${FILES},cp -r ${file} ${DIR_NAME}/${file};)
+	@git log --stat > ${DIR_NAME}/gitlog.stat
+	zip -r ${ZIP_NAME} ${DIR_NAME}
+	@rm -r -d ${DIR_NAME}
+
+.PHONY: clean all zip
