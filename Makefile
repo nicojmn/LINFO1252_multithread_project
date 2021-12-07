@@ -33,7 +33,7 @@ TTS = tts
 
 # ZIP
 DIR_NAME = groupe50_Jadin_Jeanmenne
-ZIP_NAME = ./$(DIR_NAME).zip
+TARGZ_NAME = ./$(DIR_NAME).tar.gz
 FILES = benchmark_tests implem_c Makefile README.md
 
 
@@ -180,12 +180,12 @@ clean:
 	@rm -f `find . -type f -name '*.o'`
 	@printf "All '*.o' files cleaned in the 'implem_c' directory\n"
 
-## ZIP
-zip: clean
+## ARCHIVING
+archive: clean
 	@mkdir ${DIR_NAME}
 	@$(foreach file,${FILES},cp -r ${file} ${DIR_NAME}/${file};)
 	@git log --stat > ${DIR_NAME}/gitlog.stat
-	zip -r ${ZIP_NAME} ${DIR_NAME}
+	tar -czvf ${TARGZ_NAME} ${DIR_NAME}
 	@rm -r -d ${DIR_NAME}
 
-.PHONY: clean all zip
+.PHONY: clean all archive

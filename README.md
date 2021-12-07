@@ -87,6 +87,6 @@ Ce projet se compile grâce à un **Makefile**. Il supporte les commandes suivan
 
 - `make clean` => Supprime les fichiers "_*.o_" qui ont été créés lors de la compilation,
 
-- `make zip` => Crée un fichier .zip avec les logs des différents commits.
+- `make archive` => Crée un fichier .tar.gz avec les logs des différents commits.
 
 
