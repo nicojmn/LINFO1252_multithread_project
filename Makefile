@@ -33,8 +33,8 @@ TTS = tts
 
 # ZIP
 DIR_NAME = groupe50_Jadin_Jeanmenne
-TARGZ_NAME = ./$(DIR_NAME).tar.gz
-FILES = benchmark_tests implem_c Makefile README.md
+TGZ_NAME = ./$(DIR_NAME).tar.gz
+FILES = benchmark_tests implem_c Makefile README.md rapport.pdf
 
 
 ## TOOLS
@@ -190,7 +190,7 @@ archive: clean
 	@mkdir ${DIR_NAME}
 	@$(foreach file,${FILES},cp -r ${file} ${DIR_NAME}/${file};)
 	@git log --stat > ${DIR_NAME}/gitlog.stat
-	tar -czvf ${TARGZ_NAME} ${DIR_NAME}
+	tar -czvf ${TGZ_NAME} ${DIR_NAME}
 	@rm -r -d ${DIR_NAME}
 
 .PHONY: clean all archive
