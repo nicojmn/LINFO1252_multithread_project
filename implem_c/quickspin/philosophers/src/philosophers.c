@@ -1,4 +1,5 @@
 #include "../headers/philosophers.h"
+#include "../../../active_locks/semaphore/headers/semaphore.h"
 #include "../../../logs/headers/log.h"
 
 void *philosopher(void *arg) {

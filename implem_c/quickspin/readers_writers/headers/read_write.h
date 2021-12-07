@@ -41,11 +41,6 @@ void writer(const int *nbr_iter);
 void reader(const int *nbr_iter);
 
 /**
- * Simulate a hard work to make the program more realistic
- */
-void false_hardworking(void);
-
-/**
  * The main function execute the program to solve the reader-writer problem with 640 elements written and 2560 elements read
  * @param argc : number of arguments (needed 3)
  * @param argv : array of arguments (program name, #writers, #readers)

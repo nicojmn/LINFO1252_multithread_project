@@ -14,7 +14,8 @@ T2 = 2
 ## PATHS
 POSIX = implem_c/posix
 QUICKSPIN = implem_c/quickspin
-LOCK = implem_c/active_locks
+MUTEX = implem_c/active_locks/mutex
+SEM = implem_c/active_locks/semaphore
 PHILO = philosophers
 PC = producers_consumers
 RW = readers_writers
@@ -46,24 +47,24 @@ build_$(PC_POS): $(POSIX)/$(PC)/src/prod_cons.c $(POSIX)/$(PC)/src/buffer_implem
 build_$(RW_POS): $(POSIX)/$(RW)/src/read_write.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(POSIX)/$(RW)/$(RW_POS).o $^ $(LIBS)
 
-build_$(PHILO_QS): $(QUICKSPIN)/$(PHILO)/src/philosophers.c $(QUICKSPIN)/semaphore/src/semaphore.c
+build_$(PHILO_QS): $(QUICKSPIN)/$(PHILO)/src/philosophers.c $(SEM)/src/semaphore.c $(MUTEX)/$(TTS)/src/test_and_test_and_set.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o $^ $(LIBS)
 
-build_$(PC_QS): $(QUICKSPIN)/$(PC)/src/prod_cons.c $(POSIX)/$(PC)/src/buffer_implem.c $(QUICKSPIN)/semaphore/src/semaphore.c
+build_$(PC_QS): $(QUICKSPIN)/$(PC)/src/prod_cons.c $(POSIX)/$(PC)/src/buffer_implem.c $(SEM)/src/semaphore.c $(MUTEX)/$(TTS)/src/test_and_test_and_set.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(QUICKSPIN)/$(PC)/$(PC_QS).o $^ $(LIBS)
 
-build_$(RW_QS): $(QUICKSPIN)/$(RW)/src/read_write.c $(QUICKSPIN)/semaphore/src/semaphore.c
+build_$(RW_QS): $(QUICKSPIN)/$(RW)/src/read_write.c $(SEM)/src/semaphore.c $(MUTEX)/$(TTS)/src/test_and_test_and_set.c
 	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(QUICKSPIN)/$(RW)/$(RW_QS).o $^ $(LIBS)
 
-build_$(TS): $(LOCK)/ts/src/test_and_set.c
-	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(LOCK)/$(TS)/$(TS).o $^ $(LIBS)
+build_$(TS): $(MUTEX)/$(TS)/src/test_and_set.c $(MUTEX)/$(TS)/src/test_mutex_ts.c
+	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(MUTEX)/$(TS)/$(TS).o $^ $(LIBS)
 
-build_$(TTS): $(LOCK)/tts/src/test_and_test_and_set.c
-	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(LOCK)/$(TTS)/$(TTS).o $^ $(LIBS)
+build_$(TTS): $(MUTEX)/$(TTS)/src/test_and_test_and_set.c $(MUTEX)/$(TTS)/src/test_mutex_tts.c
+	$(CC) $(INCLUDE_HEADERS_DIRECTORY) $(CFLAGS) -o $(MUTEX)/$(TTS)/$(TTS).o $^ $(LIBS)
 
 build_all_posix: build_$(PHILO_POS) build_$(PC_POS) build_$(RW_POS)
 build_all_quickspin: build_$(PHILO_QS) build_$(PC_QS) build_$(RW_QS)
-build_all_locks: build_$(TS) build_$(TTS)
+build_all_locks: build_$(TTS) #build_$(TS)
 
 build_all: build_all_posix build_all_quickspin build_all_locks
 all: build_all
@@ -85,38 +86,38 @@ $(RW_QS):
 	./$(QUICKSPIN)/$(RW)/$(RW_QS).o $(T1) $(T2)
 
 $(TS):
-	./$(LOCK)/$(TS)/$(TS).o $(T1)
-$(TSS):
-	./$(LOCK)/$(TSS)/$(TSS).o $(T1)
+	./$(MUTEX)/$(TS)/$(TS).o $(T1)
+$(TTS):
+	./$(MUTEX)/$(TTS)/$(TTS).o $(T1)
 
 
 ## TESTS
 # Test for memory leak
 mem-check: CFLAGS += -D_NOLOGS
 mem-check: clean all
-	@printf "\n\n============================================\n||  Memory test for philosophers problem (POSIX)  ||\n============================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PHILO)/$(PHILO_POS).o 20
-
-	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (POSIX)  ||\n===================================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PC)/$(PC_POS).o 6 6
-
-	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (POSIX)  ||\n===================================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(RW)/$(RW_POS).o 3 6
-
-	@printf "\n\n============================================\n||  Memory test for philosophers problem (QUICKSPIN)  ||\n============================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o 20
-
-	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (QUICKSPIN)  ||\n===================================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PC)/$(PC_QS).o 6 6
-
-	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (QUICKSPIN)  ||\n===================================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(RW)/$(RW_QS).o 3 6
+#	@printf "\n\n============================================\n||  Memory test for philosophers problem (POSIX)  ||\n============================================\n\n"
+#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PHILO)/$(PHILO_POS).o 20
+#
+#	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (POSIX)  ||\n===================================================\n\n"
+#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(PC)/$(PC_POS).o 6 6
+#
+#	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (POSIX)  ||\n===================================================\n\n"
+#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(POSIX)/$(RW)/$(RW_POS).o 3 6
+#
+#	@printf "\n\n============================================\n||  Memory test for philosophers problem (QUICKSPIN)  ||\n============================================\n\n"
+#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o 20
+#
+#	@printf "\n\n===================================================\n||  Memory test for producers-consumers problem (QUICKSPIN)  ||\n===================================================\n\n"
+#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(PC)/$(PC_QS).o 6 6
+#
+#	@printf "\n\n===================================================\n||  Memory test for readers-writers problem (QUICKSPIN)  ||\n===================================================\n\n"
+#	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(QUICKSPIN)/$(RW)/$(RW_QS).o 3 6
 
 	@printf "\n\n===================================================\n||  Memory test for test_and_set algorithm  ||\n===================================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(LOCK)/$(TS)/$(TS).o 4
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(MUTEX)/$(TS)/$(TS).o 4
 
 	@printf "\n\n===================================================\n||  Memory test for test_and_test_and_set algorithm  ||\n===================================================\n\n"
-	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(LOCK)/$(TTS)/$(TTS).o 4
+	valgrind  --leak-check=full --leak-resolution=med --track-origins=yes --vgdb=no ./$(MUTEX)/$(TTS)/$(TTS).o 4
 
 # Performs helgrind (safe threads check) test
 threads-check: CFLAGS += -D_NOLOGS
@@ -140,10 +141,10 @@ threads-check: clean all
 	valgrind --tool=helgrind -s ./$(QUICKSPIN)/$(RW)/$(RW_QS).o 2 3
 
 	@printf "\n\n===================================================\n||  Thread test for test_and_set algorithm  ||\n===================================================\n\n"
-	valgrind --tool=helgrind -s ./$(LOCK)/$(TS)/$(TS).o 4
+	valgrind --tool=helgrind -s ./$(MUTEX)/$(TS)/$(TS).o 4
 
 	@printf "\n\n===================================================\n||  Thread test for test_and_test_and_set algorithm  ||\n===================================================\n\n"
-	valgrind --tool=helgrind -s ./$(LOCK)/$(TTS)/$(TTS).o 4
+	valgrind --tool=helgrind -s ./$(MUTEX)/$(TTS)/$(TTS).o 4
 
 
 ## RUN PERF EVAL

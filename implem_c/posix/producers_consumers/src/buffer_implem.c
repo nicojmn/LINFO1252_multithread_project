@@ -43,15 +43,11 @@ int produce_elem_buffer(int elem) {
 }
 
 void insert_elem_buffer(int elem) {
-    false_hardworking();
+    while(rand() > RAND_MAX/10000);
     buffer[prod_index_buffer()] = elem;
 }
 
 int remove_elem_buffer() {
-    false_hardworking();
+    while(rand() > RAND_MAX/10000);
     return buffer[cons_index_buffer()];
-}
-
-void false_hardworking(void) {
-    while(rand() > RAND_MAX/10000); //50000
 }

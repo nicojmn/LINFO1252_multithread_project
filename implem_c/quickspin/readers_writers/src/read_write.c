@@ -1,4 +1,5 @@
 #include "../headers/read_write.h"
+#include "../../../active_locks/semaphore/headers/semaphore.h"
 #include "../../../logs/headers/log.h"
 // Private Global Variables
 pthread_mutex_t mutex_alone_access;
@@ -46,7 +47,7 @@ void writer(const int *nbr_iter) {
         sem_wait(&sem_w);
             INFO("WRITER has access to the DB");
             curr_iter+=1;
-            false_hardworking();
+            while(rand() > RAND_MAX/10000);
         sem_post(&sem_w);
 
         pthread_mutex_lock(&mutex_wc);
@@ -73,17 +74,13 @@ void reader(const int *nbr_iter) {
 
         INFO("READER has access to the DB");
         curr_iter+=1;
-        false_hardworking();
+        while(rand() > RAND_MAX/10000);
 
         pthread_mutex_lock(&mutex_rc);
             readcount-=1;
             if (readcount == 0) sem_post(&sem_w);
         pthread_mutex_unlock(&mutex_rc);
     }
-}
-
-void false_hardworking(void) {
-    while(rand() > RAND_MAX/10000);
 }
 
 int main(int argc, char **argv) {

@@ -2,33 +2,24 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <pthread.h>
-#include <semaphore.h>
+#include "../../../active_locks/semaphore/headers/semaphore.h"
 #include "../../../posix/producers_consumers/headers/buffer_implem.h"
 
 #ifndef PRODUCER_CONSUMER_H
 #define PRODUCER_CONSUMER_H
-/**
- * Initialize the semaphores "empty" and "full"
- * @return EXIT_FAILURE if an error occurs or EXIT_SUCCESS otherwise
- */
-int init_sem_buffer_states(void);
-
-/**
- *  Destroy the mutex and the semaphores "empty" and "full"
- */
-void free_mutex_sem_buffer_states(void);
+typedef struct _arg arg_t;
 
 /**
  * Produce "nbr_iter" elements
- * @param nbr_iter : The number of iteration the current producer thread must do
+ * @param args : The arguments structure arg_t
  */
-void producer(const int *nbr_iter);
+void producer(arg_t *args);
 
 /**
  * Consume "nbr_iter" elements produced by producers
- * @param nbr_iter : The number of iteration the current consumer thread must do
+ * @param args : The arguments structure arg_t
  */
-void consumer(const int *nbr_iter);
+void consumer(arg_t *args);
 
 /**
  * The main function execute the program to solve the producer-consumer problem with 1024 elements produced and consumed
