@@ -1,85 +1,61 @@
 #include "../headers/read_write.h"
-#include "../../../active_locks/semaphore/headers/semaphore.h"
 #include "../../../logs/headers/log.h"
 // Private Global Variables
-pthread_mutex_t mutex_alone_access;
-pthread_mutex_t mutex_rc;
-pthread_mutex_t mutex_wc;
-
-sem_t sem_r;
-sem_t sem_w;
+typedef struct _arg {
+    locker_t *mutex_alone_access;
+    locker_t *mutex_c;
+    active_sem_t *sem_r;
+    active_sem_t *sem_w;
+    const int nbr_iter;
+} arg_t;
 
 int readcount = 0;
 int writecount = 0;
 
-int init_sem_rw(void) {
-    int err = sem_init(&sem_r, 0, 1); if (err != 0) return EXIT_FAILURE;
-    err = sem_init(&sem_w, 0, 1); if (err != 0) return EXIT_FAILURE;
-    return EXIT_SUCCESS;
-}
-
-int init_mutex_rw(void) {
-    int err = pthread_mutex_init(&mutex_alone_access, NULL); if (err != 0) return EXIT_FAILURE;
-    err = pthread_mutex_init(&mutex_rc, NULL); if (err != 0) return EXIT_FAILURE;
-    err = pthread_mutex_init(&mutex_wc, NULL); if (err != 0) return EXIT_FAILURE;
-    return EXIT_SUCCESS;
-}
-
-void free_sem_rw(void) {
-    sem_destroy(&sem_r);
-    sem_destroy(&sem_w);
-}
-
-void free_mutex_rw(void) {
-    pthread_mutex_destroy(&mutex_alone_access);
-    pthread_mutex_destroy(&mutex_rc);
-    pthread_mutex_destroy(&mutex_wc);
-}
-
-void writer(const int *nbr_iter) {
+void writer(arg_t *args) {
     int curr_iter = 0;
-    while (curr_iter < *nbr_iter) {
-        pthread_mutex_lock(&mutex_wc);
+    while (curr_iter < args->nbr_iter) {
+        lock(args->mutex_c);
             writecount+=1;
-            if (writecount == 1) sem_wait(&sem_r);
-        pthread_mutex_unlock(&mutex_wc);
+            if (writecount == 1) active_sem_wait(args->sem_r);
+        unlock(args->mutex_c);
 
-        sem_wait(&sem_w);
+        active_sem_wait(args->sem_w);
             INFO("WRITER has access to the DB");
             curr_iter+=1;
             while(rand() > RAND_MAX/10000);
-        sem_post(&sem_w);
+        active_sem_post(args->sem_w);
 
-        pthread_mutex_lock(&mutex_wc);
+        lock(args->mutex_c);
             writecount-=1;
-            if (writecount == 0) sem_post(&sem_r);
-        pthread_mutex_unlock(&mutex_wc);
+            if (writecount == 0) active_sem_post(args->sem_r);
+        unlock(args->mutex_c);
     }
 }
 
-void reader(const int *nbr_iter) {
+void reader(arg_t *args) {
     int curr_iter = 0;
-    while (curr_iter < *nbr_iter) {
-        pthread_mutex_lock(&mutex_alone_access);
-            sem_wait(&sem_r);
+    while (curr_iter < args->nbr_iter) {
+        lock(args->mutex_alone_access);
+            active_sem_wait(args->sem_r);
 
-                pthread_mutex_lock(&mutex_rc);
+                lock(args->mutex_c);
                     //critical section
                     readcount+=1;
-                    if (readcount == 1) sem_wait(&sem_w);
-                pthread_mutex_unlock(&mutex_rc);
+                    if (readcount == 1) active_sem_wait(args->sem_w);
+                unlock(args->mutex_c);
 
-            sem_post(&sem_r);
-        pthread_mutex_unlock(&mutex_alone_access);
+        active_sem_post(args->sem_r);
+        unlock(args->mutex_alone_access);
 
         INFO("READER has access to the DB");
         curr_iter+=1;
         while(rand() > RAND_MAX/10000);
 
-        pthread_mutex_lock(&mutex_rc);
+        lock(args->mutex_c);
             readcount-=1;
-            if (readcount == 0) sem_post(&sem_w);
-        pthread_mutex_unlock(&mutex_rc);
+            if (readcount == 0) active_sem_post(args->sem_w);
+        unlock(args->mutex_c);
     }
 }
 
@@ -95,23 +71,47 @@ int main(int argc, char **argv) {
     pthread_t thread_w[n_threads_w];
     pthread_t thread_r[n_threads_r];
 
-    int nbr_iter_w[2] = {640/n_threads_w, (640/n_threads_w)+(640%n_threads_w)};
-    int nbr_iter_r[2] = {2560/n_threads_r, (2560/n_threads_r)+(2560%n_threads_r)};
-
-    err = init_mutex_rw();
-    if (err != 0) {
-        ERROR("Cannot initialize a MUTEX");
+    locker_t *mutex_alone_access = init_lock(); if (mutex_alone_access == NULL) {
+        ERROR("Cannot initialize the mutex_alone_access");
         exit(EXIT_FAILURE);
-    } SUCCESS("Mutexes Initialized");
+    }
+    locker_t *mutex_rc = init_lock(); if (mutex_rc == NULL) {
+        destroy_lock(mutex_alone_access);
+        ERROR("Cannot initialize the mutex_rc");
+        exit(EXIT_FAILURE);
+    }
+    locker_t *mutex_wc = init_lock(); if (mutex_wc == NULL) {
+        destroy_lock(mutex_alone_access);
+        destroy_lock(mutex_rc);
+        ERROR("Cannot initialize the mutex_wc");
+        exit(EXIT_FAILURE);
+    } SUCCESS("Mutex Initialized");
 
-    err = init_sem_rw();
-    if (err != 0) {
-        ERROR("Cannot initialize the SEMAPHORES");
+
+    active_sem_t *sem_r = active_sem_init(1); if (sem_r == NULL) {
+        destroy_lock(mutex_alone_access);
+        destroy_lock(mutex_rc);
+        destroy_lock(mutex_wc);
+        ERROR("Cannot initialize the sem_r SEMAPHORE");
+        exit(EXIT_FAILURE);
+    }
+    active_sem_t *sem_w = active_sem_init(1); if (sem_w == NULL) {
+        destroy_lock(mutex_alone_access);
+        destroy_lock(mutex_rc);
+        destroy_lock(mutex_wc);
+        active_sem_destroy(sem_r);
+        ERROR("Cannot initialize the sem_w SEMAPHORE");
         exit(EXIT_FAILURE);
     } SUCCESS("Semaphores Initialized");
 
+    arg_t arg_w_odd = {.nbr_iter = (640/n_threads_w)+(640%n_threads_w), .mutex_alone_access = mutex_alone_access, .mutex_c = mutex_wc, .sem_r = sem_r, .sem_w = sem_w};
+    arg_t arg_w = {.nbr_iter = 640/n_threads_w, .mutex_alone_access = mutex_alone_access, .mutex_c = mutex_wc, .sem_r = sem_r, .sem_w = sem_w};
+
+    arg_t arg_r_odd = {.nbr_iter = (2560/n_threads_r)+(2560%n_threads_r), .mutex_alone_access = mutex_alone_access, .mutex_c = mutex_rc, .sem_r = sem_r, .sem_w = sem_w};
+    arg_t arg_r = {.nbr_iter = 2560/n_threads_r, .mutex_alone_access = mutex_alone_access, .mutex_c = mutex_rc, .sem_r = sem_r, .sem_w = sem_w};
+
     for (int i = 0; i < n_threads_w; i++) {
-        err = pthread_create(&(thread_w[i]), NULL, (void *(*)(void *)) writer, i==0 ? &nbr_iter_w[1] : &nbr_iter_w[0]);
+        err = pthread_create(&(thread_w[i]), NULL, (void *(*)(void *)) writer, i==0 ? &arg_w_odd : &arg_w);
         if (err != 0) {
             ERROR("Cannot initialize the WRITER %d", i+1);
             exit(EXIT_FAILURE);
@@ -119,7 +119,7 @@ int main(int argc, char **argv) {
     }
 
     for (int i = 0; i < n_threads_r; i++) {
-        err = pthread_create(&(thread_r[i]), NULL, (void *(*)(void *)) reader, i==0 ? &nbr_iter_r[1] : &nbr_iter_r[0]);
+        err = pthread_create(&(thread_r[i]), NULL, (void *(*)(void *)) reader, i==0 ? &arg_r_odd : &arg_r);
         if (err != 0) {
             ERROR("Cannot initialize the READER %d", i+1);
             exit(EXIT_FAILURE);
@@ -144,7 +144,10 @@ int main(int argc, char **argv) {
         }
     } SUCCESS("Reader(s) Finished");
 
-    free_sem_rw();
-    free_mutex_rw();
+    destroy_lock(mutex_alone_access);
+    destroy_lock(mutex_rc);
+    destroy_lock(mutex_wc);
+    active_sem_destroy(sem_r);
+    active_sem_destroy(sem_w);
     return EXIT_SUCCESS;
 }

@@ -8,8 +8,8 @@ LIBS = -lpthread
 INCLUDE_HEADERS_DIRECTORY = -Iheaders
 
 ## SECONDS VARIABLES
-T1 = 2
-T2 = 2
+T1 = 8
+T2 = 8
 
 ## PATHS
 POSIX = implem_c/posix
@@ -79,7 +79,7 @@ $(RW_POS):
 	./$(POSIX)/$(RW)/$(RW_POS).o $(T1) $(T2)
 
 $(PHILO_QS):
-	./$(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o $(T1) $(T2)
+	./$(QUICKSPIN)/$(PHILO)/$(PHILO_QS).o $(T1)
 $(PC_QS):
 	./$(QUICKSPIN)/$(PC)/$(PC_QS).o $(T1) $(T2)
 $(RW_QS):
