@@ -164,13 +164,18 @@ perf_quickspin:
 	/usr/bin/bash ./benchmark_tests/perf_evals/producers_consumers_pe_quickspin.sh ./time_results/csv/producers_consumers_quickspin.csv
 	/usr/bin/bash ./benchmark_tests/perf_evals/readers_writers_pe_quickspin.sh ./time_results/csv/readers_writers_quickspin.csv
 
-perf_all: perf_posix perf_quickspin
+perf_ts_tts:
+	/usr/bin/bash ./benchmark_tests/perf_evals/ts_pe.sh ./time_results/csv/ts.csv
+	/usr/bin/bash ./benchmark_tests/perf_evals/tts_pe.sh ./time_results/csv/tts.csv
+
+perf_all: perf_posix perf_quickspin perf_ts_tts
 
 ## GRAPHS
 # Produce graph
 graph:
 	/usr/bin/python3 ./benchmark_tests/graph_interpret/part1-graph.py
 	/usr/bin/python3 ./benchmark_tests/graph_interpret/part2-graph.py
+	/usr/bin/python3 ./benchmark_tests/graph_interpret/ts_and_tts_plot.py
 
 
 ## CLEAN
